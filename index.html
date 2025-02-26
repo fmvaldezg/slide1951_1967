@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Swipe between maps</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+/* Add some styling for the navigation controls */
+.maplibregl-ctrl-top-right {
+    z-index: 10;
+}
+
+/* Styling for the map title divs */
+.map-title {
+    position: absolute;
+    top: 10px;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#before-title {
+    left: 50px; /* Position to the right of navigation controls */
+}
+
+#after-title {
+    right: 50px; /* Position to the left of navigation controls */
+}
+</style>
+</head>
+<body>
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    body * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .map-title {
+    position: absolute;
+    top: 10px;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    padding: 8px 15px;  /* Increased padding for larger text */
+    font-family: Arial, sans-serif;
+    font-size: 32px;    /* Increased font size from 16px to 24px */
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+</style>
+<script src="maplibre-gl-compare.js"></script>
+<link rel="stylesheet" href="maplibre-gl-compare.css" type="text/css" />
+<div id="comparison-container">
+    <div id="before" class="map">
+        <!-- Title for before map -->
+        <div id="before-title" class="map-title">1951</div>
+    </div>
+    <div id="after" class="map">
+        <!-- Title for after map -->
+        <div id="after-title" class="map-title">1967</div>
+    </div>
+</div>
+<script>
+      var beforeMap = new maplibregl.Map({
+        container: "before",
+        style: "1951.json",
+        center: [-75.17617, 39.99004],
+        zoom: 18.98,
+      });
+
+      var afterMap = new maplibregl.Map({
+        container: "after",
+        style: "1967.json",
+        center: [-75.17617, 39.99004],
+        zoom: 18.98,
+      });
+      
+      // Add navigation controls to both maps
+      beforeMap.addControl(new maplibregl.NavigationControl(), 'top-left');
+      afterMap.addControl(new maplibregl.NavigationControl(), 'top-right');
+      
+      // A selector or reference to HTML element
+      var container = "#comparison-container";
+
+      var map = new maplibregl.Compare(beforeMap, afterMap, container, {
+         //mousemove: true
+      });
+      
+      // Optional: Sync the maps to have the same zoom level and bearing
+      beforeMap.on('move', function(e) {
+        if (e.originalEvent) {
+          afterMap.setCenter(beforeMap.getCenter());
+          afterMap.setZoom(beforeMap.getZoom());
+          afterMap.setBearing(beforeMap.getBearing());
+          afterMap.setPitch(beforeMap.getPitch());
+        }
+      });
+      
+      afterMap.on('move', function(e) {
+        if (e.originalEvent) {
+          beforeMap.setCenter(afterMap.getCenter());
+          beforeMap.setZoom(afterMap.getZoom());
+          beforeMap.setBearing(afterMap.getBearing());
+          beforeMap.setPitch(afterMap.getPitch());
+        }
+      });
+</script>
+
+</body>
+</html>
