@@ -109,25 +109,7 @@ body { margin: 0; padding: 0; }
       var map = new maplibregl.Compare(beforeMap, afterMap, container, {
          //mousemove: true
       });
-      
-      // Optional: Sync the maps to have the same zoom level and bearing
-      beforeMap.on('move', function(e) {
-        if (e.originalEvent) {
-          afterMap.setCenter(beforeMap.getCenter());
-          afterMap.setZoom(beforeMap.getZoom());
-          afterMap.setBearing(beforeMap.getBearing());
-          afterMap.setPitch(beforeMap.getPitch());
-        }
-      });
-      
-      afterMap.on('move', function(e) {
-        if (e.originalEvent) {
-          beforeMap.setCenter(afterMap.getCenter());
-          beforeMap.setZoom(afterMap.getZoom());
-          beforeMap.setBearing(afterMap.getBearing());
-          beforeMap.setPitch(afterMap.getPitch());
-        }
-      });
+
 </script>
 
 </body>
